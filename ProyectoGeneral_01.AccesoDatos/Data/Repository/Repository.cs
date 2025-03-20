@@ -60,7 +60,7 @@ namespace ProyectoGeneral_01.AccesoDatos.Data.Repository
 
         }
 
-        public T GetFirsOrDefault(
+        public T GetFirstOrDefault(
             Expression<Func<T, bool>>? filter = null,
             string? includeProperties = null
          )
@@ -69,7 +69,7 @@ namespace ProyectoGeneral_01.AccesoDatos.Data.Repository
 
             if (filter != null)
             {
-                query.Where(filter);
+                query = query.Where(filter);
             }
 
             if (includeProperties != null)
@@ -84,10 +84,7 @@ namespace ProyectoGeneral_01.AccesoDatos.Data.Repository
 
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public void Remove(int id)
         {

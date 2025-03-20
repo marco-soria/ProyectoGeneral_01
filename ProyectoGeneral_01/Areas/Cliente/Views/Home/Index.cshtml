@@ -1,8 +1,37 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model ProyectoGeneral_01.Models.ViewModel.HomeViewModel
+
+@{
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row mt-1">
+    <div class="col-sm-12">
+        <h1 class="text-center py-1">Ultimos cursos y tutoriales</h1>
+    </div>
 </div>
+
+
+@if (Model.listArticulos.Count() > 0)
+{
+    <hr />
+    <div class="row">
+        @foreach (var item in Model.listArticulos.OrderBy(x => x.Id))
+        {
+            <div class="col-sm-4">
+                <div class="card">
+                    <img src="@item.UrlImagen" class="img-thumbnail" width="100%" />
+                    <div class="card-body">
+                        <h5 class="text-center">@item.Nombre</h5>
+                        <a asp-action="Detalle" class="btn btn-success" style="border-radius:10px; width:100%" asp-route-Id="@item.Id">Ver Detalle</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+}
+else
+{
+    <p>No hay Articulos</p>
+}

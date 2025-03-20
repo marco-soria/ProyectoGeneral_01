@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using ProyectoGeneral_01.AccesoDatos.Data.Repository.IRepository;
 using ProyectoGeneral_01.Models;
+using ProyectoGeneral_01.Models.ViewModel;
 
 namespace ProyectoGeneral_01.Areas.Cliente.Controllers;
 
@@ -8,16 +10,31 @@ namespace ProyectoGeneral_01.Areas.Cliente.Controllers;
 public class HomeController : Controller
 {
     
-    private readonly ILogger<HomeController> _logger;
+    private readonly IContenedorTrabajo _iContenedorTrabajo;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(IContenedorTrabajo iContenedorTrabajo)
     {
-        _logger = logger;
+        _iContenedorTrabajo = iContenedorTrabajo;
     }
-
+    [HttpGet]
     public IActionResult Index()
     {
-        return View();
+        HomeViewModel homeViewModel = new HomeViewModel()
+        {
+            listSliders = _iContenedorTrabajo.ISliderRepository.GetAll(),
+            listArticulos = _iContenedorTrabajo.IArticuloRepository.GetAll(includeProperties: "Categoria")
+        };
+
+        ViewBag.isHome = true;
+
+        return View(homeViewModel);
+    }
+
+    [HttpGet]
+    public ActionResult Detalle(int id)
+    {
+        var articulo = _iContenedorTrabajo.IArticuloRepository.GetFirstOrDefault(includeProperties: "Categoria", filter: a => a.Id == id);
+        return View(articulo);
     }
 
     public IActionResult Privacy()
