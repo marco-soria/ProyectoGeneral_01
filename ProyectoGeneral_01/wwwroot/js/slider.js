@@ -1,10 +1,4 @@
-﻿
-Bootcamp CodiGo22:09
-
-
-
-
-var dataTable;
+﻿var dataTable;
 
 $(document).ready(function () {
     cargarDataTable();
@@ -36,7 +30,7 @@ function cargarDataTable() {
             {
                 "data": "urlImagen",
                 "render": function (image) {
-                    return `<img src="../${image}" width="60%" height="60%"`
+                    return `<img src="../${image}" width="60%" height="60%">`
                 }
             },
             {
