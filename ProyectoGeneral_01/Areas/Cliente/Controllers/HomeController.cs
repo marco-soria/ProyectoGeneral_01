@@ -16,18 +16,62 @@ public class HomeController : Controller
     {
         _iContenedorTrabajo = iContenedorTrabajo;
     }
+    //[HttpGet]
+    //public IActionResult Index()
+    //{
+    //    HomeViewModel homeViewModel = new HomeViewModel()
+    //    {
+    //        listSliders = _iContenedorTrabajo.ISliderRepository.GetAll(),
+    //        listArticulos = _iContenedorTrabajo.IArticuloRepository.GetAll(includeProperties: "Categoria")
+    //    };
+
+    //    ViewBag.isHome = true;
+
+    //    return View(homeViewModel);
+    //}
+
+    //Pagina Index con paginacion
     [HttpGet]
-    public IActionResult Index()
+    public IActionResult Index (int page =1, int pageSize = 6)
     {
+        var articulos = _iContenedorTrabajo.IArticuloRepository.AsQueryable();
+        var paginaEntries = articulos.Skip((page - 1) * pageSize).Take(pageSize);
+
         HomeViewModel homeViewModel = new HomeViewModel()
         {
             listSliders = _iContenedorTrabajo.ISliderRepository.GetAll(),
-            listArticulos = _iContenedorTrabajo.IArticuloRepository.GetAll(includeProperties: "Categoria")
+            listArticulos = paginaEntries.ToList(),
+            PageIndex = page,
+            TotalPages = (int)Math.Ceiling(articulos.Count() / (double)pageSize)
         };
 
-        ViewBag.isHome = true;
+        ViewBag.IsHome = true;
 
         return View(homeViewModel);
+    }
+
+    //Implementación de la búsqueda
+    [HttpGet]
+    public IActionResult ResultadosBusqueda(string searchString, int page = 1, int pageSize = 10)
+    {
+        var articulos = _iContenedorTrabajo.IArticuloRepository.AsQueryable();
+        if(!String.IsNullOrEmpty(searchString))
+        {
+            articulos = articulos.Where(a => a.Nombre.ToLower().Contains(searchString.ToLower()) ||
+            a.Descripcion.ToLower().Contains(searchString.ToLower()));
+        }
+
+        //Contar los elementos despues de aplicar el filtro
+        var totalArticulos = articulos.Count();
+
+        //Paginar los resultados
+        var pageEntries = articulos.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+        //crear el modelo de la vista
+        ListaPaginada<Articulo> articulosPaginados = 
+            new ListaPaginada<Articulo>(pageEntries.ToList(), totalArticulos, page, pageSize, searchString);
+
+        return View(articulosPaginados);
     }
 
     [HttpGet]

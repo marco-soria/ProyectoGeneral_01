@@ -10,5 +10,9 @@ namespace ProyectoGeneral_01.Models.ViewModel
     {
         public IEnumerable<Slider> listSliders { get; set; }
         public IEnumerable<Articulo> listArticulos { get; set; }
+
+        //Paginacion
+        public int PageIndex { get; set; }
+        public int TotalPages { get; set; }
     }
 }

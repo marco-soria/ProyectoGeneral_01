@@ -8,6 +8,8 @@
 
         ISliderRepository ISliderRepository { get; }
 
+        IUsuarioRepository IUsuarioRepository { get; }
+
         void Save();
     }
 }

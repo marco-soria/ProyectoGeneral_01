@@ -18,11 +18,14 @@ namespace ProyectoGeneral_01.AccesoDatos.Data.Repository
             ICategoriaRepository = new CategoriaRepository(_db);
             IArticuloRepository = new ArticuloRepository(_db);
             ISliderRepository = new SliderRepository(_db);
+            IUsuarioRepository = new UsuarioRepository(_db);
         }
         public ICategoriaRepository ICategoriaRepository { get; private set; }
         public IArticuloRepository IArticuloRepository { get; private set; }
 
         public ISliderRepository ISliderRepository { get; private set; }
+
+        public IUsuarioRepository IUsuarioRepository { get; private set; }
 
 
         public void Dispose()
